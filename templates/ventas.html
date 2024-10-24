@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block title %}Registrar Ventas{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ventas.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Registrar Venta</h2>
+<form action="{{ url_for('ventas') }}" method="POST">
+    <div id="productos-contenedor">
+        <div class="producto-entrada">
+            <label for="id_producto">Producto:</label>
+            <select id="id_producto" name="id_producto[]" required>
+                {% for producto in productos %}
+                <option value="{{ producto[0] }}">{{ producto[1] }} - ${{ producto[2] }} (Stock: {{ producto[3] }})</option>
+                {% endfor %}
+            </select>
+
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad[]" required>
+        </div>
+    </div>
+
+    <button type="button" onclick="agregarProducto()">Agregar Otro Producto</button>
+    <button type="submit">Registrar Venta</button>
+</form>
+
+<script>
+function agregarProducto() {
+    var contenedor = document.getElementById('productos-contenedor');
+    var nuevoProducto = document.querySelector('.producto-entrada').cloneNode(true);
+    contenedor.appendChild(nuevoProducto);
+}
+</script>
+
+<h3>Ventas Recientes</h3>
+<ul>
+    {% for venta in ventas %}
+    <li>{{ venta[1] }} - Cantidad: {{ venta[2] }} - Total: ${{ venta[3] }} - Fecha: {{ venta[4] }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Total de Ventas: ${{ total_ventas }}</h3>
+{% endblock %}

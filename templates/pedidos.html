@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block title %}Registrar Pedido{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pedidos.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Registrar Pedido</h2>
+<form action="{{ url_for('pedidos') }}" method="POST">
+    <label for="nombre_cliente">Nombre del Cliente:</label>
+    <input type="text" id="nombre_cliente" name="nombre_cliente" required>
+
+    <label for="direccion">Dirección:</label>
+    <input type="text" id="direccion" name="direccion" required>
+
+    <div id="productos-contenedor">
+        <div class="producto-entrada">
+            <label for="productos">Productos:</label>
+            <select id="productos" name="productos[]" required>
+                {% for producto in productos %}
+                <option value="{{ producto[0] }}">{{ producto[1] }} - ${{ producto[2] }} (Stock: {{ producto[3] }})</option>
+                {% endfor %}
+            </select>
+
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidades[]" required>
+        </div>
+    </div>
+
+    <button type="button" onclick="agregarProducto()">Agregar Otro Producto</button>
+    <button type="submit">Registrar Pedido</button>
+</form>
+
+<script>
+function agregarProducto() {
+    var contenedor = document.getElementById('productos-contenedor');
+    var nuevoProducto = document.querySelector('.producto-entrada').cloneNode(true);
+    contenedor.appendChild(nuevoProducto);
+}
+</script>
+
+<h3>Pedidos Registrados</h3>
+<ul>
+    {% for pedido in pedidos %}
+    <li>{{ pedido[1] }} - Dirección: {{ pedido[2] }} - Total: ${{ pedido[3] }} - Fecha: {{ pedido[4] }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Total de Ventas: ${{ total_ventas }}</h3>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+{% block title %}Gestión de Productos{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/productos.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Registrar Producto</h2>
+<form action="{{ url_for('productos') }}" method="POST" autocomplete="off">
+    <label for="nombre">Nombre del Producto:</label>
+    <input type="text" id="nombre" name="nombre" onkeyup="sugerirProductos()" required>
+    <ul id="sugerencias"></ul>
+
+    <label for="precio">Precio:</label>
+    <input type="number" id="precio" name="precio" step="0.01" required>
+
+    <label for="stock">Stock:</label>
+    <input type="number" id="stock" name="stock" required>
+
+    <button type="submit">Registrar Producto</button>
+</form>
+
+<h3>Lista de Productos</h3>
+<ul id="lista-productos">
+    {% for producto in productos %}
+    <li>
+        {{ producto[1] }} - Precio: ${{ producto[2] }} - Stock: {{ producto[3] }}
+        {% if producto[3] < 10 %}
+            <span class="stock-low">¡Stock bajo!</span>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+<script>
+function sugerirProductos() {
+    var termino = document.getElementById('nombre').value;
+    var sugerencias = document.getElementById('sugerencias');
+    sugerencias.innerHTML = ''; 
+
+    if (termino.length > 0) {
+        fetch(`/productos/sugerencias?termino=${termino}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                data.forEach(function(nombre) {
+                    var li = document.createElement('li');
+                    li.textContent = nombre;
+                    li.onclick = function() {
+                        document.getElementById('nombre').value = nombre;
+                        sugerencias.innerHTML = '';
+                        document.getElementById('precio').focus();
+                    };
+                    sugerencias.appendChild(li);
+                });
+            }
+        });
+    }
+}
+</script>
+{% endblock %}

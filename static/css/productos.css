@@ -1,0 +1,49 @@
+h2 {
+    color: #2200ff;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+form input, form button, form select {
+    margin-bottom: 10px;
+}
+
+#sugerencias {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: 500px;
+    position: absolute;
+    background-color: white;
+    z-index: 1000;
+}
+
+#sugerencias li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#sugerencias li:hover {
+    background-color: #f1f1f1;
+}
+
+ul#lista-productos {
+    margin-top: 20px;
+}
+
+ul#lista-productos li {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stock-low {
+    color: rgb(255, 0, 0);
+    font-weight: bold;
+}
